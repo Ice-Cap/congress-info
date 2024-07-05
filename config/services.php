@@ -14,6 +14,10 @@ return [
     |
     */
 
+    'congress' => [
+        'key' => env('CONGRESS_API_KEY'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
