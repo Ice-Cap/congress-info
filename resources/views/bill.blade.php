@@ -11,15 +11,21 @@
             $bill = (object)$bill;
         @endphp
         <main>
-            <p>
+            <h1>
                 {{ $bill->title }}
-            </p>
+            </h1>
             <p>
                 {{ $bill->number }}
             </p>
             <p>
                 {{ $bill->updateDate }}
             </p>
+            <h2>Summaries</h2>
+            @foreach($summaries as $summary)
+                @php
+                    echo $summary = trim($summary["text"], '"');
+                @endphp
+            @endforeach
         </main>
     </body>
 </html>
