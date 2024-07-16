@@ -3,10 +3,16 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        @vite(['resources/css/app.css'])
         <title>Congress Info</title>
     </head>
     <body>
+        <header>
+            <h1>Congress Info</h1>
+            <nav>
+                <a href="/">Home</a>
+            </nav>
+        </header>
         <main>
             @foreach($bills as $bill)
                 @php
@@ -14,8 +20,8 @@
                 @endphp
                 <div>
                     <h4>{{ $bill->title }}</h4>
-                    <p>{{ $bill->number }}</p>
-                    <p>{{ $bill->updateDate }}</p>
+                    <p>Number: {{ $bill->number }}</p>
+                    <p>Latest action: {{ $bill->latestAction["text"] }} <span>Date: {{ $bill->latestAction["actionDate"] }}</span></p>
                     <a href="/bill/{{$bill->congress}}/{{$bill->type}}/{{$bill->number}}">View Bill</a>
                 </div>
             @endforeach

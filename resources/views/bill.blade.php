@@ -3,10 +3,16 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        @vite(['resources/css/app.css'])
         <title>Congress Info</title>
     </head>
     <body>
+        <header>
+            <h1>Congress Info</h1>
+            <nav>
+                <a href="/">Home</a>
+            </nav>
+        </header>
         @php
             $bill = (object)$bill;
         @endphp
