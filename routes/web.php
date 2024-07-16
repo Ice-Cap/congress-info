@@ -17,3 +17,17 @@ Route::get('/', function () {
         'bills' => (object)$response['bills']
     ]);
 });
+
+Route::get('/bill/{congress}/{billType}/{billNumber}', function ($congress, $billType, $billNumber) {
+    $apiKey = config('services.congress.key');
+    $response = Http::get("https://api.congress.gov/v3/bill/$congress/$billType/$billNumber?api_key=$apiKey");
+    if ($response->failed()) {
+        return Response::json([
+            'error' => 'Failed to retrieve bills from Congress API'
+        ], 500);
+    }
+
+    return view('bill', [
+        'bill' => (object)$response['bill']
+    ]);
+});
