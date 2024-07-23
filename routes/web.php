@@ -67,9 +67,6 @@ Route::get('/bill/{congress}/{billType}/{billNumber}', function ($congress, $bil
     $textVersionsUrl = $billResponse->bill->textVersions->url . "&api_key=$apiKey";
     $textResponse = Http::get($textVersionsUrl);
     $textFormatUrls = $textResponse->object()->textVersions[0]->formats;
-    // echo '<pre>';
-    // print_r($textFormatUrls);
-    // die;
     $textUrl = '';
     foreach ($textFormatUrls as $format)
     {
@@ -112,7 +109,7 @@ Route::get('/bill/{congress}/{billType}/{billNumber}', function ($congress, $bil
     $messages = [
         [
             'role' => 'system',
-            'content' => 'You will take an image, document, or text of a congress bill and provide a short summary of it (try to stay around 350 words). You will focus on highlighting the main points of the bill along with its sponsors, status, and any other relevant information.'
+            'content' => 'You will take an image, document, or text of a congress bill and provide a short summary of it (try to stay around 350 words). Try to use simple, common language that can easily be understood by anyone. You must return the text as html only using p tags, ul tags, and ol tags.'
         ],
         [
             'role' => 'user',
@@ -126,7 +123,8 @@ Route::get('/bill/{congress}/{billType}/{billNumber}', function ($congress, $bil
         'Content-Type' => 'application/json'
     ])->post('https://api.openai.com/v1/chat/completions', [
         'model' => 'gpt-4o-mini',
-        'messages' => $messages
+        'messages' => $messages,
+        'temperature' => 0.4,
     ]);
     if ($summary->failed())
     {
@@ -141,6 +139,7 @@ Route::get('/bill/{congress}/{billType}/{billNumber}', function ($congress, $bil
     return view('bill', [
         'bill' => $billResponse->bill,
         'summaries' => $summariesResponse->summaries,
-        'aiSummary' => $summary->choices[0]->message->content
+        'aiSummary' => $summary->choices[0]->message->content,
+        'fullText' => $textResponse
     ]);
 });

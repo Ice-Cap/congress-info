@@ -28,14 +28,20 @@
             </p>
             <h2>AI Summary</h2>
             <p>
-                {{ $aiSummary }}
+                @php
+                    echo $aiSummary;
+                @endphp
             </p>
             <h2>Summaries</h2>
             @foreach($summaries as $summary)
                 @php
-                    echo $summary = trim($summary["text"], '"');
+                    echo $summary = trim($summary->text, '"');
                 @endphp
             @endforeach
+            <h2>Full Text</h2>
+            @php
+                echo $fullText;
+            @endphp
         </main>
     </body>
 </html>
