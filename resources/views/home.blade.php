@@ -18,8 +18,8 @@
                 @php
                     $bill = (object)$bill;
                 @endphp
-                <div>
-                    <h4>{{ $bill->title }}</h4>
+                <div class="bill">
+                    <h4 class="heading-3">{{ $bill->title }}</h4>
                     <p>Number: {{ $bill->number }}</p>
                     <p>Latest action: {{ $bill->latestAction["text"] }} <span>Date: {{ $bill->latestAction["actionDate"] }}</span></p>
                     <a href="/bill/{{$bill->congress}}/{{$bill->type}}/{{$bill->number}}">View Bill</a>

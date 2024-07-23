@@ -1,3 +1,5 @@
+@import url('./globals.css');
+
 * {
     box-sizing: border-box;
 }
@@ -19,4 +21,9 @@ header {
     justify-content: space-between;
     padding: 10px 50px;
     background-color: rgb(229, 229, 229);
+}
+
+.bill {
+    margin: 64px 0;
+    max-width: 800px;
 }
