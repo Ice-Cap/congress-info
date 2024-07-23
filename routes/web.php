@@ -140,6 +140,7 @@ Route::get('/bill/{congress}/{billType}/{billNumber}', function ($congress, $bil
         'bill' => $billResponse->bill,
         'summaries' => $summariesResponse->summaries,
         'aiSummary' => $summary->choices[0]->message->content,
-        'fullText' => $textResponse
+        'fullText' => $textResponse,
+        'latestAction' => $billResponse->bill->latestAction
     ]);
 });

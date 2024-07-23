@@ -21,10 +21,13 @@
                 {{ $bill->title }}
             </h1>
             <p>
-                {{ $bill->number }}
+                Bill Number: {{ $bill->number }}
             </p>
             <p>
-                {{ $bill->updateDate }}
+                Last Updated: {{ $bill->updateDate }}
+            </p>
+            <p>
+                Latest Action: {{ $bill->latestAction->text }} <span>Date: {{ $bill->latestAction->actionDate }}</span>
             </p>
             <h2>AI Summary</h2>
             <p>
