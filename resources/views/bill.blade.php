@@ -26,6 +26,10 @@
             <p>
                 {{ $bill->updateDate }}
             </p>
+            <h2>AI Summary</h2>
+            <p>
+                {{ $aiSummary }}
+            </p>
             <h2>Summaries</h2>
             @foreach($summaries as $summary)
                 @php

@@ -18,6 +18,10 @@ return [
         'key' => env('CONGRESS_API_KEY'),
     ],
 
+    'openai' => [
+        'key' => env('OPENAI_API_KEY')
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
