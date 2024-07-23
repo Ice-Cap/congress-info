@@ -29,8 +29,11 @@ header {
 }
 
 .bill {
-    margin: 64px 0;
+    margin: 32px 0;
     max-width: 800px;
+    background-color: #fff;
+    padding: 24px;
+    border: 1px solid #ead8d8;
 }
 
 .text-red {
