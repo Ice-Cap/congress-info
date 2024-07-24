@@ -17,34 +17,42 @@
             $bill = (object)$bill;
         @endphp
         <main>
-            <h1 class="heading-2">
-                {{ $bill->title }}
-            </h1>
-            <p>
-                Bill Number: {{ $bill->number }}
-            </p>
-            <p>
-                Last Updated: {{ $bill->updateDate }}
-            </p>
-            <p>
-                Latest Action: {{ $bill->latestAction->text }} <span>Date: {{ $bill->latestAction->actionDate }}</span>
-            </p>
-            <h2 class="heading-3">AI Summary</h2>
-            <p>
+            <div class="bill-heading">
+                <h1 class="heading-2">
+                    {{ $bill->title }}
+                </h1>
+                <p>
+                    Bill Number: {{ $bill->number }}
+                </p>
+                <p>
+                    Last Updated: {{ $bill->updateDate }}
+                </p>
+                <p>
+                    Latest Action: {{ $bill->latestAction->text }} <span>Date: {{ $bill->latestAction->actionDate }}</span>
+                </p>
+            </div>
+            <div class="bill-section">
+                <h2 class="heading-3">AI Summary</h2>
+                <p>
+                    @php
+                        echo $aiSummary;
+                    @endphp
+                </p>
+            </div>
+            <div class="bill-section">
+                <h2 class="heading-3">Summaries</h2>
+                @foreach($summaries as $summary)
+                    @php
+                        echo $summary = trim($summary->text, '"');
+                    @endphp
+                @endforeach
+            </div>
+            <div class="bill-section">
+                <h2 class="heading-3">Full Text</h2>
                 @php
-                    echo $aiSummary;
+                    echo $fullText;
                 @endphp
-            </p>
-            <h2 class="heading-3">Summaries</h2>
-            @foreach($summaries as $summary)
-                @php
-                    echo $summary = trim($summary->text, '"');
-                @endphp
-            @endforeach
-            <h2 class="heading-3">Full Text</h2>
-            @php
-                echo $fullText;
-            @endphp
+            </div>
         </main>
     </body>
 </html>

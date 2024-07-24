@@ -43,3 +43,18 @@ header {
 nav a {
     color: #fff;
 }
+
+ul {
+    max-width: 700px;
+}
+
+.bill-heading {
+    background-color: #fff;
+    padding: 24px;
+    margin-bottom: 32px;
+    border: 1px solid #ead8d8;
+}
+
+.bill-section {
+    padding: 16px 24px;
+}
