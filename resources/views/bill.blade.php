@@ -8,7 +8,7 @@
     </head>
     <body>
         <header>
-            <h1>Congress Info</h1>
+            <h1 class="heading-1">Congress Info</h1>
             <nav>
                 <a href="/">Home</a>
             </nav>

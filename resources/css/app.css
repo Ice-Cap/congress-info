@@ -46,6 +46,13 @@ nav a {
 
 ul {
     max-width: 700px;
+    margin-left: 16px;
+}
+
+li {
+    margin-bottom: 16px;
+    display: list-item;
+    list-style-position: outside;
 }
 
 .bill-heading {
@@ -56,5 +63,8 @@ ul {
 }
 
 .bill-section {
-    padding: 16px 24px;
+    padding: 24px;
+    border: 1px solid #d8e0ea;
+    background-color: #fff;
+    margin-bottom: 32px;
 }
