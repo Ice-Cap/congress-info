@@ -17,10 +17,10 @@ return new class extends Migration
             $table->integer('bill_id');
             $table->string('bill_type');
             $table->integer("congress_number");
-            $table->string("bill_summary");
+            $table->text("bill_summary");
             $table->string("bill_title");
-            $table->string("bill_ai_summary");
-            $table->string("bill_full_text");
+            $table->text("bill_ai_summary");
+            $table->text("bill_full_text");
             $table->string("bill_latest_action");
             $table->string("bill_latest_action_date");
             $table->string("bill_update_date");

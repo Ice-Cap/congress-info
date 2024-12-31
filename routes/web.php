@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     $apiKey = config('services.congress.key');
@@ -23,6 +24,34 @@ Route::get('/', function () {
  */
 Route::get('/bill/{congress}/{billType}/{billNumber}', function ($congress, $billType, $billNumber)
 {
+    // Check if bill exists in database
+    $cachedBill = DB::table('bills')
+        ->where('congress_number', $congress)
+        ->where('bill_type', $billType)
+        ->where('bill_id', $billNumber)
+        ->first();
+
+    if ($cachedBill) {
+        return view('bill', [
+            'bill' => (object)[
+                'title' => $cachedBill->bill_title,
+                'number' => $cachedBill->bill_id,
+                'updateDate' => $cachedBill->bill_update_date,
+                'latestAction' => (object)[
+                    'text' => $cachedBill->bill_latest_action,
+                    'actionDate' => $cachedBill->bill_latest_action_date
+                ]
+            ],
+            'summaries' => json_decode($cachedBill->bill_summary),
+            'aiSummary' => $cachedBill->bill_ai_summary,
+            'fullText' => $cachedBill->bill_full_text,
+            'latestAction' => (object)[
+                'text' => $cachedBill->bill_latest_action,
+                'actionDate' => $cachedBill->bill_latest_action_date
+            ]
+        ]);
+    }
+
     $apiKey = config('services.congress.key');
     $billResponse = Http::get("https://api.congress.gov/v3/bill/$congress/$billType/$billNumber?api_key=$apiKey");
     if ($billResponse->failed())
@@ -134,6 +163,22 @@ Route::get('/bill/{congress}/{billType}/{billNumber}', function ($congress, $bil
         ], 500);
     }
     $summary = $summary->object();
+
+    // After getting all the data, store it in the database
+    DB::table('bills')->insert([
+        'bill_id' => $billNumber,
+        'bill_type' => $billType,
+        'congress_number' => $congress,
+        'bill_summary' => json_encode($summariesResponse->summaries),
+        'bill_title' => $billResponse->bill->title,
+        'bill_ai_summary' => $summary->choices[0]->message->content,
+        'bill_full_text' => $textResponse,
+        'bill_latest_action' => $billResponse->bill->latestAction->text,
+        'bill_latest_action_date' => $billResponse->bill->latestAction->actionDate,
+        'bill_update_date' => $billResponse->bill->updateDate,
+        'created_at' => now(),
+        'updated_at' => now()
+    ]);
 
     return view('bill', [
         'bill' => $billResponse->bill,
