@@ -109,14 +109,13 @@ Route::get('/bill/{congress}/{billType}/{billNumber}', function ($congress, $bil
     $messages = [
         [
             'role' => 'system',
-            'content' => 'You will take an image, document, or text of a congress bill and provide a short summary of it (try to stay around 350 words). Try to use simple, common language that can easily be understood by anyone. You must return the text as html only using p tags, ul tags, and ol tags.'
+            'content' => 'You will take an image, document, or text of a congress bill and provide a short summary of it (try to stay around 350 words). Try to use simple, common language that can easily be understood by anyone. You must return the text as html only using p tags, ul tags, and ol tags. The first section of the summary should be one paragraph which is abrief, easy to understand summary of the bill no need to include the title in the summary. The second section will be short bullet points regarding the main points of the bill.'
         ],
         [
             'role' => 'user',
             'content' => 'Please summarize this bill: ' . $textResponse
         ]
     ];
-    // $messages = json_encode($messages);
     $openAiKey = config('services.openai.key');
     $summary = Http::withHeaders([
         'Authorization' => "Bearer $openAiKey",
