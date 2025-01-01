@@ -6,6 +6,10 @@
     padding: 0;
 }
 
+div {
+    width: 100%;
+}
+
 body {
     font-family: 'Nunito', sans-serif;
     background-color: #f8fafb;
