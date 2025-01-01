@@ -72,3 +72,8 @@ li {
 .ai-summary {
     background-color: #e0f0f5;
 }
+
+.large-container {
+    max-width: 1450px;
+    margin: 0 auto;
+}
