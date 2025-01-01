@@ -17,7 +17,7 @@ body {
 }
 
 main {
-    max-width: 1200px;
+    max-width: 1300px;
     padding-top: 64px;
     margin: 0 auto;
 }
@@ -80,4 +80,17 @@ li {
 .large-container {
     max-width: 1450px;
     margin: 0 auto;
+}
+
+.bill-page .main-content .left-column {
+    width: 75%;
+    margin-right: 32px;
+}
+
+.bill-page .main-content .right-column {
+    width: 25%;
+}
+
+.sponsor {
+    margin-bottom: 16px;
 }

@@ -33,7 +33,8 @@ class BillController extends Controller
             'latestAction' => (object)[
                'text' => $cachedBill->bill_latest_action,
                'actionDate' => $cachedBill->bill_latest_action_date
-            ]
+            ],
+            'sponsors' => json_decode($cachedBill->bill_sponsors) ?? []
          ]);
       }
 
@@ -81,7 +82,8 @@ class BillController extends Controller
          'summaries' => $summariesResponse->summaries,
          'aiSummary' => $aiSummary->choices[0]->message->content,
          'fullText' => $textResponse,
-         'latestAction' => $billResponse->bill->latestAction
+         'latestAction' => $billResponse->bill->latestAction,
+         'sponsors' => $billResponse->bill->sponsors ?? []
       ]);
    }
 
@@ -159,6 +161,8 @@ class BillController extends Controller
 
    private function storeBill(stdClass $bill, string $billNumber, string $billType, string $congress, stdClass $summariesResponse, string $textResponse, stdClass $aiSummary): void
    {
+      $sponsors = $bill->sponsors ?? [];
+      $sponsors = json_encode($sponsors);
       DB::table('bills')->insert([
          'bill_id' => $billNumber,
          'bill_type' => $billType,
@@ -170,6 +174,7 @@ class BillController extends Controller
          'bill_latest_action' => $bill->latestAction->text,
          'bill_latest_action_date' => $bill->latestAction->actionDate,
          'bill_update_date' => $bill->updateDate,
+         'bill_sponsors' => $sponsors,
          'created_at' => now(),
          'updated_at' => now()
       ]);
