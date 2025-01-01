@@ -31,28 +31,45 @@
                     Latest Action: {{ $bill->latestAction->text }} <span>Date: {{ $bill->latestAction->actionDate }}</span>
                 </p>
             </div>
-            <div class="bill-section">
-                <h2 class="heading-3">AI Summary</h2>
-                <p>
+            @if(isset($aiSummary))
+                <div class="bill-section ai-summary">
+                    <h2 class="heading-3">AI Summary</h2>
+                    <p>
                     @php
                         echo $aiSummary;
                     @endphp
-                </p>
-            </div>
-            <div class="bill-section">
-                <h2 class="heading-3">Summaries</h2>
-                @foreach($summaries as $summary)
+                    </p>
+                </div>
+            @endif
+            @if(isset($summaries))
+                <div class="bill-section">
+                    <h2 class="heading-3">Summaries</h2>
+                    @foreach($summaries as $summary)
+                        @php
+                            $summary = trim($summary->text, '"');
+                            if (strlen($summary) > 0)
+                            {
+                                echo $summary;
+                            }
+                            else
+                            {
+                                echo "No summary available";
+                            }
+                        @endphp
+                    @endforeach
+                    @if(count($summaries) === 0)
+                        <p>No summaries available</p>
+                    @endif
+                </div>
+            @endif
+            @if(isset($fullText))
+                <div class="bill-section">
+                    <h2 class="heading-3">Full Text</h2>
                     @php
-                        echo $summary = trim($summary->text, '"');
-                    @endphp
-                @endforeach
-            </div>
-            <div class="bill-section">
-                <h2 class="heading-3">Full Text</h2>
-                @php
                     echo $fullText;
-                @endphp
-            </div>
+                    @endphp
+                </div>
+            @endif
         </main>
     </body>
 </html>
