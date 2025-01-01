@@ -46,6 +46,7 @@ header {
 
 nav a {
     color: #fff;
+    margin-left: 16px;
 }
 
 ul {
@@ -92,5 +93,28 @@ li {
 }
 
 .sponsor {
+    margin-bottom: 16px;
+}
+
+.representative {
+    margin-bottom: 16px;
+    padding: 16px;
+    background-color: #fff;
+    border: 1px solid #d8e0ea;
+    max-width: 800px;
+}
+
+.representative p:last-child {
+    margin-bottom: 0;
+}
+
+.btn-container {
+    width: fit-content;
+}
+
+.btn-container a {
+    display: block;
+    text-decoration: none;
+    white-space: nowrap;
     margin-bottom: 16px;
 }
