@@ -39,3 +39,8 @@ Route::get('/representatives', [RepresentativeController::class, 'index']);
  * Get specific representative
  */
 Route::get('/representative/{id}', [RepresentativeController::class, 'show']);
+
+/**
+ * Get bills for a specific representative
+ */
+Route::get('/representative/{id}/bills', [RepresentativeController::class, 'bills']);

@@ -8,6 +8,9 @@
         <h2 class="heading-2">Representative {{ $rep->directOrderName }}</h2>
         @if ($rep)
             <div class="representative-info">
+                <div class="image-container">
+                    <img src="{{ $rep->depiction->imageUrl }}" alt="{{ $rep->directOrderName }}">
+                </div>
                 <p>State: {{ $rep->state }}</p>
                 <p>Cosponsored legislation: {{ $rep->cosponsoredLegislation->count }}</p>
                 <p>Sponsored legislation: {{ $rep->sponsoredLegislation->count }}</p>
@@ -17,6 +20,7 @@
                         <li>{{ $party->partyName }} - {{ $party->startYear }}</li>
                     @endforeach
                 </ul>
+                <a href="/representative/{{ $rep->bioguideId }}/bills" class="btn">View Bills</a>
             </div>
         @else
             <p>No representative found</p>

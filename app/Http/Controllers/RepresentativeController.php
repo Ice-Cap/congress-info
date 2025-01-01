@@ -39,4 +39,17 @@ class RepresentativeController extends Controller
         $data = $response->object();
         return view('rep', ['rep' => $data->member ?? null]);
     }
+
+    public function bills($id)
+    {
+        $apiKey = config('services.congress.key');
+        $sponsoredBills = Http::get("https://api.congress.gov/v3/member/$id/sponsored-legislation?api_key=$apiKey");
+        $cosponsoredBills = Http::get("https://api.congress.gov/v3/member/$id/cosponsored-legislation?api_key=$apiKey");
+        $rep = Http::get("https://api.congress.gov/v3/member/$id?api_key=$apiKey");
+        return view('rep-bills', [
+            'sponsoredBills' => $sponsoredBills->object()->sponsoredLegislation ?? [],
+            'cosponsoredBills' => $cosponsoredBills->object()->cosponsoredLegislation ?? [],
+            'rep' => $rep->object()->member ?? null
+        ]);
+    }
 }

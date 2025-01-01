@@ -66,7 +66,9 @@
                 <h2 class="heading-3">Sponsors</h2>
                 @foreach ($sponsors as $sponsor)
                     <div class="sponsor">
-                        <p>{{ $sponsor->fullName }}</p>
+                        <a href="/representative/{{ $sponsor->bioguideId }}">
+                            {{ $sponsor->fullName }}
+                        </a>
                     </div>
                 @endforeach
             </div>
