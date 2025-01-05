@@ -10,8 +10,9 @@ use Illuminate\Http\Request;
 /**
  * Home page
  *
- * returns a list of bills
- * Can filter with query params like: /?offset=20&limit=10
+ * Returns a list of bills
+ * Can filter with query params
+ * Query params: offset, limit, fromDate, toDate, sort
  */
 Route::get('/', [BillController::class, 'getBillsList']);
 

@@ -14,22 +14,59 @@ use stdClass;
 
 class BillController extends CongressController
 {
+   protected function formatDate(string | null $date): string | null
+   {
+      if (empty($date)) {
+         return $date;
+      }
+
+      return date('Y-m-d\T00:00:00\Z', strtotime($date));
+   }
+
+   protected function formatSort(string | null $sort): string | null
+   {
+      if (empty($sort)) {
+         return $sort;
+      }
+
+      return "updateDate+$sort";
+   }
+
    public function getBillsList(Request $request)
    {
       $offset = $request->query('offset', 0);
       $limit = $request->query('limit', 20);
+      $startDate = $this->formatDate($request->query('startDate', null));
+      $endDate = $this->formatDate($request->query('endDate', null));
+      $sort = $this->formatSort($request->query('sort', null));
+
+      // Just caching pages without filters to save space
       $cacheKey = "bills-list-$offset-$limit";
       $cacheTTL = 1200;
 
-      if (Cache::has($cacheKey)) {
+      $usingCache = (!$startDate && !$endDate && !$sort);
+      if (Cache::has($cacheKey) && $usingCache) {
          $bills = Cache::get($cacheKey);
          $bills = json_decode($bills);
       } else {
-         $response = Http::get("https://api.congress.gov/v3/bill", [
+         $requestParams = [
             'api_key' => $this->apiKey,
             'offset' => $offset,
             'limit' => $limit,
-         ]);
+         ];
+         $optionalParams = [
+            'fromDateTime' => $startDate,
+            'toDateTime' => $endDate,
+            'sort' => $sort
+         ];
+         foreach ($optionalParams as $key => $val) {
+            if (!$val) {
+               continue;
+            }
+
+            $requestParams[$key] = $val;
+         }
+         $response = Http::get("https://api.congress.gov/v3/bill", $requestParams);
 
          if ($response->failed() || !isset($response['bills'])) {
             return Response::json([
@@ -37,8 +74,10 @@ class BillController extends CongressController
             ], 500);
          }
 
-         $cachedBills = json_encode(Util::toObject($response['bills']));
-         Cache::put($cacheKey, $cachedBills, $cacheTTL);
+         if ($usingCache) {
+            $cachedBills = json_encode(Util::toObject($response['bills']));
+            Cache::put($cacheKey, $cachedBills, $cacheTTL);
+         }
 
          $bills = Util::toObject($response['bills']);
       }
