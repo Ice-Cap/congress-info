@@ -64,13 +64,17 @@
             </div>
             <div class="right-column">
                 <h2 class="heading-3">Sponsors</h2>
-                @foreach ($sponsors as $sponsor)
-                    <div class="sponsor">
-                        <a href="/representative/{{ $sponsor->bioguideId }}">
-                            {{ $sponsor->fullName }}
-                        </a>
-                    </div>
-                @endforeach
+                @if (isset($sponsors))
+                    @foreach ($sponsors as $sponsor)
+                        <div class="sponsor">
+                            <a href="/representative/{{ $sponsor->bioguideId }}">
+                                {{ $sponsor->fullName }}
+                            </a>
+                        </div>
+                    @endforeach
+                @else
+                    <p>No Sponsors found</p>
+                @endif
             </div>
         </div>
     </main>

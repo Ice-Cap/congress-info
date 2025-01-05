@@ -5,15 +5,25 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\RepresentativeController;
+use Illuminate\Http\Request;
 
 /**
  * Home page
  *
  * returns a list of bills
+ * Can filter with query params like: /?offset=20&limit=10
  */
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
     $apiKey = config('services.congress.key');
-    $response = Http::get("https://api.congress.gov/v3/bill?api_key=$apiKey");
+    $offset = $request->query('offset', 0);
+    $limit = $request->query('limit', 20);
+
+    $response = Http::get("https://api.congress.gov/v3/bill", [
+        'api_key' => $apiKey,
+        'offset' => $offset,
+        'limit' => $limit,
+    ]);
+
     if ($response->failed()) {
         return Response::json([
             'error' => 'Failed to retrieve bills from Congress API'

@@ -118,3 +118,16 @@ li {
     white-space: nowrap;
     margin-bottom: 16px;
 }
+
+.pagination {
+    padding: 20px;
+    margin-bottom: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 800px;
+}
+
+.pagination a {
+    display: inline-block;
+}
