@@ -13,27 +13,7 @@ use Illuminate\Http\Request;
  * returns a list of bills
  * Can filter with query params like: /?offset=20&limit=10
  */
-Route::get('/', function (Request $request) {
-    $apiKey = config('services.congress.key');
-    $offset = $request->query('offset', 0);
-    $limit = $request->query('limit', 20);
-
-    $response = Http::get("https://api.congress.gov/v3/bill", [
-        'api_key' => $apiKey,
-        'offset' => $offset,
-        'limit' => $limit,
-    ]);
-
-    if ($response->failed()) {
-        return Response::json([
-            'error' => 'Failed to retrieve bills from Congress API'
-        ], 500);
-    }
-
-    return view('home', [
-        'bills' => (object)$response['bills']
-    ]);
-});
+Route::get('/', [BillController::class, 'getBillsList']);
 
 /**
  * Get specific bill

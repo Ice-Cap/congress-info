@@ -7,10 +7,48 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\Request;
+use App\Util\Util;
 use stdClass;
 
-class BillController extends Controller
+class BillController extends CongressController
 {
+   public function getBillsList(Request $request)
+   {
+      $offset = $request->query('offset', 0);
+      $limit = $request->query('limit', 20);
+      $cacheKey = "bills-list-$offset-$limit";
+      $cacheTTL = 1200;
+
+      if (Cache::has($cacheKey)) {
+         $bills = Cache::get($cacheKey);
+         $bills = json_decode($bills);
+      } else {
+         $response = Http::get("https://api.congress.gov/v3/bill", [
+            'api_key' => $this->apiKey,
+            'offset' => $offset,
+            'limit' => $limit,
+         ]);
+
+         if ($response->failed() || !isset($response['bills'])) {
+            return Response::json([
+               'error' => 'Failed to retrieve bills from Congress API'
+            ], 500);
+         }
+
+         $cachedBills = json_encode(Util::toObject($response['bills']));
+         Cache::put($cacheKey, $cachedBills, $cacheTTL);
+
+         $bills = Util::toObject($response['bills']);
+      }
+
+
+      return view('home', [
+         'bills' => $bills
+      ]);
+   }
+
    public function show(string $congress, string $billType, string $billNumber): View|JsonResponse
    {
       // Check if bill exists in database
@@ -38,8 +76,7 @@ class BillController extends Controller
          ]);
       }
 
-      $apiKey = config('services.congress.key');
-      $billResponse = Http::get("https://api.congress.gov/v3/bill/$congress/$billType/$billNumber?api_key=$apiKey");
+      $billResponse = Http::get("https://api.congress.gov/v3/bill/$congress/$billType/$billNumber?api_key=$this->apiKey");
 
       if ($billResponse->failed()) {
          return Response::json([
@@ -56,8 +93,8 @@ class BillController extends Controller
          ], 404);
       }
 
-      $summariesResponse = $this->getBillSummaries($bill, $apiKey);
-      $textResponse = $this->getBillText($bill, $apiKey);
+      $summariesResponse = $this->getBillSummaries($bill, $this->apiKey);
+      $textResponse = $this->getBillText($bill, $this->apiKey);
 
       if (empty($textResponse)) {
          return view('bill', [
