@@ -44,6 +44,8 @@
             <div class="bill">
                 <h4 class="heading-4">{{ $bill->title }}</h4>
                 <p>Bill Number: {{ $bill->number }}</p>
+                <p>Bill Type: {{ $bill->type }}</p>
+                <p>Congress: {{ $bill->congress }}</p>
                 <p>Latest action: {{ $bill->latestAction->text }} <span>Date:
                         {{ $bill->latestAction->actionDate }}</span></p>
                 <a href="/bill/{{ $bill->congress }}/{{ $bill->type }}/{{ $bill->number }}">View Bill</a>

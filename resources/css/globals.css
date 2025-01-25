@@ -47,34 +47,41 @@
     font-size: var(--font-size-1);
     font-weight: 800;
 }
+
 .heading-2 {
     font-size: var(--font-size-2);
     font-weight: 800;
     color: var(--text-dark-gray);
     margin-bottom: 24px;
 }
+
 .heading-3 {
     font-size: var(--font-size-3);
     color: var(--text-dark-gray);
     font-weight: 700;
     margin-bottom: 16px;
 }
+
 .heading-4 {
     font-size: var(--font-size-4);
     font-weight: 700;
     color: var(--text-dark-gray);
     margin-bottom: 16px;
 }
+
 /* Text */
 .text-1 {
     font-size: var(--font-size-5);
 }
+
 .text-2 {
     font-size: var(--font-size-6);
 }
+
 .text-3 {
     font-size: var(--font-size-7);
 }
+
 .text-4 {
     font-size: var(--font-size-8);
 }
@@ -83,49 +90,62 @@
 .flex {
     display: flex;
 }
+
 .justify-center {
     justify-content: center;
 }
+
 .justify-start {
     justify-content: flex-start;
 }
+
 .justify-end {
     justify-content: flex-end;
 }
+
 .align-center {
     align-items: center;
 }
+
 .align-start {
     align-items: flex-start;
 }
+
 .align-end {
     align-items: flex-end;
 }
+
 .flex-center {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .flex-between {
     display: flex;
     justify-content: space-between;
 }
+
 .flex-around {
     display: flex;
     justify-content: space-around;
 }
+
 .flex-column {
     flex-direction: column;
 }
+
 .flex-column-center {
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
 .flex-column-between {
     flex-direction: column;
     justify-content: space-between;
 }
+
 .flex-column-around {
     flex-direction: column;
     justify-content: space-around;
@@ -138,12 +158,15 @@
 .color-secondary {
     color: var(--secondary-color);
 }
+
 .text-color-secondary {
     color: var(--text-secondary-color);
 }
+
 .color-primary {
     color: var(--primary-color);
 }
+
 .text-color-primary {
     color: var(--text-primary-color);
 }
@@ -151,9 +174,11 @@
 ul ul {
     margin-left: 16px;
 }
+
 ol ul {
     margin-left: 16px;
 }
+
 ul ol {
     margin-left: 16px;
 }
@@ -161,6 +186,10 @@ ul ol {
 a {
     text-decoration: none;
     color: var(--primary-color);
+}
+
+a:hover {
+    color: #349ce7;
 }
 
 p {

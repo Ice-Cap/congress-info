@@ -151,7 +151,7 @@ class BillController extends CongressController
       }
 
       // Store in database
-      $this->storeBill($billResponse->bill, $billNumber, $billType, $congress, $summariesResponse, $textResponse, $aiSummary);
+      $this->storeBill($billResponse->bill, $billNumber, $billType, $congress, $summariesResponse, $textResponse, $aiSummary->choices[0]->message->content);
 
       return view('bill', [
          'bill' => $billResponse->bill,
@@ -163,7 +163,7 @@ class BillController extends CongressController
       ]);
    }
 
-   private function getCachedBill(string $congress, string $billType, string $billNumber): ?stdClass
+   public function getCachedBill(string $congress, string $billType, string $billNumber): ?stdClass
    {
       return DB::table('bills')
          ->where('congress_number', $congress)
@@ -172,7 +172,7 @@ class BillController extends CongressController
          ->first();
    }
 
-   private function getBillSummaries(stdClass $bill, string $apiKey): stdClass
+   public function getBillSummaries(stdClass $bill, string $apiKey): stdClass
    {
       $summaries = $bill->summaries ?? null;
       if (!isset($summaries)) {
@@ -189,7 +189,7 @@ class BillController extends CongressController
       return $summariesResponse->object();
    }
 
-   private function getBillText(stdClass $bill, string $apiKey): ?string
+   public function getBillText(stdClass $bill, string $apiKey): ?string
    {
       $textVersions = $bill->textVersions ?? null;
       if (!isset($textVersions)) {
@@ -212,7 +212,7 @@ class BillController extends CongressController
       return $textResponse->failed() ? null : $textResponse->body();
    }
 
-   private function generateAISummary(string $textResponse): ?stdClass
+   public function generateAISummary(string $textResponse): ?stdClass
    {
       $messages = [
          [
@@ -235,7 +235,7 @@ class BillController extends CongressController
       ])->object();
    }
 
-   private function storeBill(stdClass $bill, string $billNumber, string $billType, string $congress, stdClass $summariesResponse, string $textResponse, stdClass $aiSummary): void
+   public function storeBill(stdClass $bill, string $billNumber, string $billType, string $congress, stdClass $summariesResponse, string $textResponse, string $aiSummary): void
    {
       $sponsors = $bill->sponsors ?? [];
       $sponsors = json_encode($sponsors);
@@ -245,7 +245,7 @@ class BillController extends CongressController
          'congress_number' => $congress,
          'bill_summary' => json_encode($summariesResponse->summaries),
          'bill_title' => $bill->title,
-         'bill_ai_summary' => $aiSummary->choices[0]->message->content,
+         'bill_ai_summary' => $aiSummary,
          'bill_full_text' => $textResponse,
          'bill_latest_action' => $bill->latestAction->text,
          'bill_latest_action_date' => $bill->latestAction->actionDate,
