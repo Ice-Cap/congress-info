@@ -86,13 +86,15 @@ class SaveBills extends Command
 
                 $this->info("Checking if bill is cached: $congress/$billType/$billNumber");
 
-                $cachedBill = $this->billController->getCachedBill($congress, $billType, $billNumber);
+                $cachedBill = $this->billController->getStoredBill($congress, $billType, $billNumber);
                 if ($cachedBill) {
                     continue;
                 }
 
-                // sleep for 1 second to avoid rate limiting
-                sleep(1);
+                $this->info("Getting bill from Congress API: $congress/$billType/$billNumber");
+
+                // sleep for 0.5 seconds to avoid rate limiting
+                usleep(500000);  // 500000 microseconds = 0.5 seconds
                 $billResponse = Http::get("https://api.congress.gov/v3/bill/$congress/$billType/$billNumber?api_key=" . $this->apiKey);
 
                 if ($billResponse->failed()) {

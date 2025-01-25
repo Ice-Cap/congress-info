@@ -14,6 +14,26 @@ use stdClass;
 
 class BillController extends CongressController
 {
+   public function search(Request $request)
+   {
+      $query = $request->query('q');
+      $bills = DB::table('bills')
+         ->where('bill_title', 'like', '%' . $query . '%')
+         ->get();
+      foreach ($bills as $bill) {
+         $bill->title = $bill->bill_title;
+         $bill->number = $bill->bill_id;
+         $bill->type = $bill->bill_type;
+         $bill->congress = $bill->congress_number;
+         $bill->updateDate = $bill->bill_update_date;
+         $bill->latestAction = (object)[
+            'text' => $bill->bill_latest_action,
+            'actionDate' => $bill->bill_latest_action_date
+         ];
+      }
+      return view('home', ['bills' => $bills]);
+   }
+
    protected function formatDate(string | null $date): string | null
    {
       if (empty($date)) {
@@ -91,7 +111,7 @@ class BillController extends CongressController
    public function show(string $congress, string $billType, string $billNumber): View|JsonResponse
    {
       // Check if bill exists in database
-      $cachedBill = $this->getCachedBill($congress, $billType, $billNumber);
+      $cachedBill = $this->getStoredBill($congress, $billType, $billNumber);
 
       if ($cachedBill) {
          return view('bill', [
@@ -163,7 +183,7 @@ class BillController extends CongressController
       ]);
    }
 
-   public function getCachedBill(string $congress, string $billType, string $billNumber): ?stdClass
+   public function getStoredBill(string $congress, string $billType, string $billNumber): ?stdClass
    {
       return DB::table('bills')
          ->where('congress_number', $congress)

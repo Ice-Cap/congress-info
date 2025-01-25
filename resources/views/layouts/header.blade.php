@@ -7,6 +7,10 @@
                 <a href="/">Bills</a>
                 <a href="/representatives">Representatives</a>
             </nav>
+            <form action="/bills/search" method="GET" class="search-form">
+                <input type="text" name="q" placeholder="Search bills..." class="search-input">
+                <button type="submit" class="search-button btn btn-secondary">Search</button>
+            </form>
         </div>
     </div>
 </header>

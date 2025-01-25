@@ -22,6 +22,11 @@ Route::get('/', [BillController::class, 'getBillsList']);
 Route::get('/bill/{congress}/{billType}/{billNumber}', [BillController::class, 'show']);
 
 /**
+ * Search bills
+ */
+Route::get('/bills/search', [BillController::class, 'search']);
+
+/**
  * Get all representatives
  */
 Route::get('/representatives', [RepresentativeController::class, 'index']);

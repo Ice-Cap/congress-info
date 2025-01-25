@@ -181,3 +181,9 @@ select {
     border: 1px solid #2478b1;
     color: #fff;
 }
+
+.btn-secondary {
+    background-color: #77afd4;
+    border: 1px solid #2478b1;
+    color: #fff;
+}
