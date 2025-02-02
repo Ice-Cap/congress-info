@@ -162,13 +162,15 @@ class BillController extends CongressController
          ]);
       }
 
-      $aiSummary = $this->generateAISummary($textResponse);
+      $aiSummaryResponse = $this->generateAISummary($textResponse);
 
-      if (!$aiSummary) {
+      if ($aiSummaryResponse->failed()) {
          return Response::json([
             'error' => 'Failed to summarize bill'
          ], 500);
       }
+
+      $aiSummary = $aiSummaryResponse->object();
 
       // Store in database
       $this->storeBill($billResponse->bill, $billNumber, $billType, $congress, $summariesResponse, $textResponse, $aiSummary->choices[0]->message->content);
@@ -232,12 +234,12 @@ class BillController extends CongressController
       return $textResponse->failed() ? null : $textResponse->body();
    }
 
-   public function generateAISummary(string $textResponse): ?stdClass
+   public function generateAISummary(string $textResponse): ?\Illuminate\Http\Client\Response
    {
       $messages = [
          [
             'role' => 'system',
-            'content' => 'You will take an image, document, or text of a congress bill and provide a short summary of it (try to stay around 350 words). Try to use simple, common language that can easily be understood by anyone. You must return the text as html only using p tags, ul tags, and ol tags. The first section of the summary should be one paragraph which is abrief, easy to understand summary of the bill no need to include the title in the summary. The second section will be short bullet points regarding the main points of the bill.'
+            'content' => 'You will take an image, document, or text of a congress bill and provide a short summary of it (try to stay around 350 words). Try to use simple, common language that can easily be understood by anyone. You must return the text as html only using p tags, ul tags, and ol tags. The first section of the summary should be one paragraph which is a brief, easy to understand summary of the bill, no need to include the title in the summary. The second section will be short bullet points regarding the main points of the bill. Do not include the title of the bill in the bullet points as that will be redundant.'
          ],
          [
             'role' => 'user',
@@ -245,14 +247,16 @@ class BillController extends CongressController
          ]
       ];
 
-      return Http::withHeaders([
+      $response = Http::withHeaders([
          'Authorization' => "Bearer " . config('services.openai.key'),
          'Content-Type' => 'application/json'
       ])->post('https://api.openai.com/v1/chat/completions', [
          'model' => 'gpt-4o-mini',
          'messages' => $messages,
          'temperature' => 0.4,
-      ])->object();
+      ]);
+
+      return $response;
    }
 
    public function storeBill(stdClass $bill, string $billNumber, string $billType, string $congress, stdClass $summariesResponse, string $textResponse, string $aiSummary): void

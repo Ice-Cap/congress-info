@@ -93,8 +93,8 @@ class SaveBills extends Command
 
                 $this->info("Getting bill from Congress API: $congress/$billType/$billNumber");
 
-                // sleep for 0.5 seconds to avoid rate limiting
-                usleep(500000);  // 500000 microseconds = 0.5 seconds
+                // sleep for 0.4 seconds to avoid rate limiting
+                usleep(400000);  // 400000 microseconds = 0.4 seconds
                 $billResponse = Http::get("https://api.congress.gov/v3/bill/$congress/$billType/$billNumber?api_key=" . $this->apiKey);
 
                 if ($billResponse->failed()) {
@@ -120,7 +120,18 @@ class SaveBills extends Command
                 $aiSummary = '';
                 if (!empty($textResponse)) {
                     $this->info("Generating AI summary");
-                    $aiSummary = $this->billController->generateAISummary($textResponse);
+                    $aiSummaryResponse = $this->billController->generateAISummary($textResponse);
+                    if ($aiSummaryResponse->failed()) {
+                        $this->error("Failed to generate AI summary response: $aiSummaryResponse");
+                        return;
+                    }
+
+                    $aiSummary = $aiSummaryResponse->object();
+                    if (!isset($aiSummary->choices[0]->message->content)) {
+                        $this->error("Failed to generate AI summary response: $aiSummary");
+                        return;
+                    }
+
                     $aiSummary = $aiSummary->choices[0]->message->content;
                 }
 
