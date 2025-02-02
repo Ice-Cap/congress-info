@@ -42,7 +42,14 @@
                 $bill = (object) $bill;
             @endphp
             <div class="bill">
-                <h4 class="heading-4">{{ $bill->title }}</h4>
+                <div class="heading-container flex-between">
+                    <h4 class="heading-4">{{ $bill->title }}</h4>
+                    <span class="quick-info">
+                        @if (!empty($bill->hasAiSummary))
+                            <span class="tag">AI Summary</span>
+                        @endif
+                    </span>
+                </div>
                 <p>Bill Number: {{ $bill->number }}</p>
                 <p>Bill Type: {{ $bill->type }}</p>
                 <p>Congress: {{ $bill->congress }}</p>

@@ -27,6 +27,11 @@ Route::get('/bill/{congress}/{billType}/{billNumber}', [BillController::class, '
 Route::get('/bills/search', [BillController::class, 'search']);
 
 /**
+ * Get stored bills
+ */
+Route::get('/stored-bills', [BillController::class, 'getStoredBills']);
+
+/**
  * Get all representatives
  */
 Route::get('/representatives', [RepresentativeController::class, 'index']);

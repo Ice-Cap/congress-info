@@ -187,3 +187,16 @@ select {
     border: 1px solid #2478b1;
     color: #fff;
 }
+
+.quick-info {
+    margin-left: 40px;
+}
+
+.tag {
+    background-color: #97a8b3;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: var(--font-size-8);
+    white-space: nowrap;
+}

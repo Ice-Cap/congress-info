@@ -34,6 +34,26 @@ class BillController extends CongressController
       return view('home', ['bills' => $bills]);
    }
 
+   public function getStoredBills(Request $request)
+   {
+      $bills = DB::table('bills')
+         ->get();
+      foreach ($bills as $bill) {
+         $hasAiSummary = !empty($bill->bill_ai_summary);
+         $bill->title = $bill->bill_title;
+         $bill->number = $bill->bill_id;
+         $bill->type = $bill->bill_type;
+         $bill->congress = $bill->congress_number;
+         $bill->updateDate = $bill->bill_update_date;
+         $bill->latestAction = (object)[
+            'text' => $bill->bill_latest_action,
+            'actionDate' => $bill->bill_latest_action_date
+         ];
+         $bill->hasAiSummary = $hasAiSummary;
+      }
+      return view('home', ['bills' => $bills]);
+   }
+
    protected function formatDate(string | null $date): string | null
    {
       if (empty($date)) {
