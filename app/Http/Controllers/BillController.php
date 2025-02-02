@@ -239,7 +239,7 @@ class BillController extends CongressController
       $messages = [
          [
             'role' => 'system',
-            'content' => 'You will take an image, document, or text of a congress bill and provide a short summary of it (try to stay around 350 words). Try to use simple, common language that can easily be understood by anyone. You must return the text as html only using p tags, ul tags, and ol tags. The first section of the summary should be one paragraph which is a brief, easy to understand summary of the bill, no need to include the title in the summary. The second section will be short bullet points regarding the main points of the bill. Do not include the title of the bill in the bullet points as that will be redundant.'
+            'content' => 'You will take an image, document, or text of a congress bill and provide a short summary of it (try to stay around 350 words). Try to use simple, common language that can easily be understood by anyone. You must return the text as html only using p tags, ul tags, and ol tags. The first section of the summary should be one paragraph which is a brief, easy to understand summary of the bill, no need to include the title in the summary. The second section will be short bullet points regarding the main points of the bill. Do not include the title of the bill in the bullet points as that will be redundant. You must have no more than 4 bullet points in your summary.'
          ],
          [
             'role' => 'user',
