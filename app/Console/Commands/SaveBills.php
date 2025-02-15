@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use App\Util\Util;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\BillController;
+use Illuminate\Support\Benchmark;
 
 class SaveBills extends Command
 {
@@ -28,12 +29,19 @@ class SaveBills extends Command
     protected BillController $billController;
 
     protected int $currentCongress = 119;
+    protected int $billsSaved = 0;
 
     public function __construct()
     {
         parent::__construct();
         $this->apiKey = config('services.congress.key');
         $this->billController = new BillController();
+
+        // Set script timeout to 1 hour
+        set_time_limit(3600);
+
+        // Increase memory limit to 512MB
+        ini_set('memory_limit', '512M');
     }
 
     /**
@@ -42,7 +50,15 @@ class SaveBills extends Command
     public function handle()
     {
         $this->info("Start save bills");
-        $this->saveBills();
+
+        $executionTime = Benchmark::measure(function () {
+            $this->saveBills();
+        });
+
+        $seconds = number_format($executionTime / 1000, 2);
+        $minutes = number_format($seconds / 60, 2);
+        $this->info("Bills saved: {$this->billsSaved}");
+        $this->info("Execution time: {$seconds} seconds or {$minutes} minutes");
     }
 
     public function saveBills()
@@ -151,6 +167,7 @@ class SaveBills extends Command
             }
 
             $this->info("Storing bill");
+            $this->billsSaved += 1;
             $this->billController->storeBill($bill, $billNumber, $billType, $congress, $summariesResponse, $textResponse, $aiSummary);
         }
     }
